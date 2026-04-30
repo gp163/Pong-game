@@ -38,3 +38,13 @@ def test_ball_update(init_pygame):
     initial_y = ball.rect.y
     ball.update()
     assert ball.rect.x != initial_x or ball.rect.y != initial_y  # Ball moved
+    keys = {pygame.K_w: False, pygame.K_s: True}
+    paddle.update(keys, True)
+    assert paddle.rect.y == 105  # Moved down by speed
+
+def test_ball_update(init_pygame):
+    ball = Ball()
+    initial_x = ball.rect.x
+    initial_y = ball.rect.y
+    ball.update()
+    assert ball.rect.x != initial_x or ball.rect.y != initial_y  # Ball moved

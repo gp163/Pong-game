@@ -1,9 +1,6 @@
 import pygame
 import random
 
-# Initialize Pygame
-pygame.init()
-
 # Screen dimensions
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
@@ -11,14 +8,6 @@ SCREEN_HEIGHT = 600
 # Colors
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
-
-# Create screen
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption("Pong Game")
-
-# Clock for FPS
-clock = pygame.time.Clock()
-FPS = 60
 
 # Paddle class
 class Paddle(pygame.sprite.Sprite):
@@ -68,45 +57,57 @@ class Ball(pygame.sprite.Sprite):
             self.speed_x = 5 * random.choice([-1, 1])
             self.speed_y = 5 * random.choice([-1, 1])
 
-# Sprite groups
-all_sprites = pygame.sprite.Group()
-paddles = pygame.sprite.Group()
+# Initialize Pygame only when run as main
+if __name__ == "__main__":
+    pygame.init()
 
-# Create paddles
-left_paddle = Paddle(10, SCREEN_HEIGHT // 2 - 45)
-right_paddle = Paddle(SCREEN_WIDTH - 25, SCREEN_HEIGHT // 2 - 45)
-paddles.add(left_paddle)
-paddles.add(right_paddle)
-all_sprites.add(left_paddle, right_paddle)
+    # Create screen
+    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    pygame.display.set_caption("Pong Game")
 
-# Create ball
-ball = Ball()
-all_sprites.add(ball)
+    # Clock for FPS
+    clock = pygame.time.Clock()
+    FPS = 60
 
-# Game loop
-running = True
-while running:
-    clock.tick(FPS)
+    # Sprite groups
+    all_sprites = pygame.sprite.Group()
+    paddles = pygame.sprite.Group()
 
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
+    # Create paddles
+    left_paddle = Paddle(10, SCREEN_HEIGHT // 2 - 45)
+    right_paddle = Paddle(SCREEN_WIDTH - 25, SCREEN_HEIGHT // 2 - 45)
+    paddles.add(left_paddle)
+    paddles.add(right_paddle)
+    all_sprites.add(left_paddle, right_paddle)
 
-    keys = pygame.key.get_pressed()
+    # Create ball
+    ball = Ball()
+    all_sprites.add(ball)
 
-    # Update
-    left_paddle.update(keys, True)
-    right_paddle.update(keys, False)
-    ball.update()
+    # Game loop
+    running = True
+    while running:
+        clock.tick(FPS)
 
-    # Collision with paddles
-    if pygame.sprite.spritecollide(ball, paddles, False):
-        ball.speed_x *= -1
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
 
-    # Draw
-    screen.fill(BLACK)
-    all_sprites.draw(screen)
+        keys = pygame.key.get_pressed()
 
-    pygame.display.flip()
+        # Update
+        left_paddle.update(keys, True)
+        right_paddle.update(keys, False)
+        ball.update()
 
-pygame.quit()
+        # Collision with paddles
+        if pygame.sprite.spritecollide(ball, paddles, False):
+            ball.speed_x *= -1
+
+        # Draw
+        screen.fill(BLACK)
+        all_sprites.draw(screen)
+
+        pygame.display.flip()
+
+    pygame.quit()
